@@ -29,7 +29,7 @@ jobs:
       - name: Install vkube-cli
         run: |
           pip install vkube
-          vkube --version  # 验证安装
+          vkube version  # 验证安装
       - name: Parse imageRegistry from VKubefile.yaml
         id: parse_registry
         run: |
