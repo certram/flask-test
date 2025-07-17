@@ -1,0 +1,37 @@
+Kind: vkube # default: vkube
+vkubeToken: "38KZHfS1S5CUr4WJshNJgCvRtmQhoWpdLhpMDhB2mgvqrJTxKpwuXvrEVqS51NRtCPtsnuvaxst5agmdzKWZSBdJWRjuz1QWKiuVTFn6JUqhEHAZK6X4d27thkzrXND3rgQjnC2n9PGyBDkcyAboGDgwi5ViBeK5Ftsg5btcmsD479BSNRTPnXkuGd8zdVLHmkWUuRBVQAsdVXVHY3LnCzpdW6dA2vCV2PASKyY96SQkySKipr1phtUGuXXoQRwz8EP6gacoFaF7yYJ7zgroawcUhXbNipr2GHBWK1gGyfwP1Y5SUo97MQWQqz18DMGJMK4xbFCewfN7ADNMGkTF8bbcG4muyFiQ9SLRNfgjAqTcb3sSP8MygF4iWte5wJNyZUDd9JDr5vpz5d" # Your userService's token (Required)
+imageRegistry: docker # docker ghcr
+# Deploy information required
+containers:
+- imageName: mmyapp  # Your container image you want to deploy
+  tag: "1.1.0" # Your container image tag, default: latest, optional
+  deploy:
+    containerName: nodewatcher  # Your container name
+    resourceUnit: 1 # You specfied the resource unit(at least 1) for your container. Please refer https://docs.vcloud.systems/VKservice/assetsDetail.html#resourceunit
+    command: ["/kube/v-cloud-kube", "-file","/config/v-kube-service.yaml","-permission-list","/config/permission_list.yaml"]
+    ports: # If it is configured, your container will be exposed to the outside world.
+    - containerPort: 980 # Your container port
+      hostPort: 20001 # Your host port to access the container
+      path: "/test" 
+      rewrite: true
+    env: # If it is configured, your container will have environment variables.
+    - name: ENV1
+      value: VALUE1
+    - name: ENV2
+      value: VALUE2
+    args:
+    - "config.file=/etc/loki/loki-config.yaml"
+    - "config.expand-env=true"
+    configurations:  # If it is configured, your container will have configurations.
+      /Users/bertramliu/codes/python/test-cli/vkube-cli/vkube_cli/nginx.conf: "/etc/nginx/conf.d/default.conf"
+    persistStorage: "/test" # If it is configured, your container will have persistent storage.
+  build:
+    installSSH: false
+    sshPubKeyPath: "~/.ssh/id_rsa.pub" # Your SSH public key path, optional
+    dockerfilePath: "./internal/Dockerfile" # Your Dockerfile path
+    contextPath: "./internal/" # optional, docker build context
+    buildArgs:
+      - name: GOLANG_VER
+        value: 1.22.3
+      - name: port
+        value: 3005

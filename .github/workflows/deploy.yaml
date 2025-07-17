@@ -1,0 +1,79 @@
+name: Deploy with vkube-cli
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码
+      - uses: actions/checkout@v4
+      # 2. 安装 Docker 引擎
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      # 3. 设置python环境和检查环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: check tool installed or not
+        run: |
+          python --version
+          pip3 --version
+          docker --version || echo "Docker not installed, proceeding to install"
+      - name: Install vkube-cli
+        run: |
+          pip install vkube
+          vkube --version  # 验证安装
+      - name: Parse imageRegistry from VKubefile.yaml
+        id: parse_registry
+        run: |
+          # 使用 yq 工具解析 YAML 文件
+          echo "Installing yq..."
+          sudo wget https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+          
+          # 解析 imageRegistry 字段
+          REGISTRY=$(yq '.imageRegistry' ./VKubefile.yaml)
+          echo "Found imageRegistry: $REGISTRY"
+          
+          # 规范化 registry 格式
+          case "$REGISTRY" in
+            "ghcr")
+              NORMALIZED_REGISTRY="ghcr.io"
+              USERNAME="${{ github.actor }}"
+              PASSWORD="${{ secrets.GHCR_TOKEN }}"
+              ;;
+            "docker")
+              NORMALIZED_REGISTRY="docker.io"
+              USERNAME="${{ secrets.DOCKERHUB_USERNAME }}"
+              PASSWORD="${{ secrets.DOCKERHUB_TOKEN }}"
+              ;;
+            *)
+              echo "Unsupported registry: $REGISTRY"
+              exit 1
+              ;;
+          esac
+          echo "registry=$NORMALIZED_REGISTRY" >> $GITHUB_ENV
+          echo "registry_username=$USERNAME" >> $GITHUB_ENV
+          echo "registry_password=$PASSWORD" >> $GITHUB_ENV
+      - name: Login the Registry
+        if: env.registry != ''
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.registry }}
+          username: ${{ env.registry_username }}
+          password: ${{ env.registry_password }}
+      
+      - name: Set vkube-cli configurations
+        run: |
+          vkube config -w GHCRToken=${{ secrets.GHCR_TOKEN }}
+          vkube config -w DockerhubToken=${{ secrets.DOCKERHUB_TOKEN }}
+      # run vkube-cli deploy command
+      - name: Deploy
+        run: |
+          vkube deploy -f ./VKubefile.yaml
