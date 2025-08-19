@@ -10,12 +10,11 @@ containers:
     resourceUnit: 1 # You specfied the resource unit(at least 1) for your container. Please refer https://docs.vcloud.systems/VKservice/assetsDetail.html#resourceunit
     ports: # If it is configured, your container will be exposed to the outside world.
     - containerPort: 980 # Your container port
-      hostPort: 20001 # Your host port to access the container
+      hostPort: 2009 # Your host port to access the container
       path: "/test" 
       rewrite: true
     configurations:  # If it is configured, your container will have configurations.
       /Users/bertramliu/codes/python/test-cli/vkube-cli/vkube_cli/nginx.conf: "/etc/nginx/conf.d/default.conf"
-    persistStorage: "/test" # If it is configured, your container will have persistent storage.
   build:
     installSSH: false
     sshPubKeyPath: "" # Your SSH public key path, optional
