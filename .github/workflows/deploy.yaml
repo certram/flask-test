@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 1. 检出代码
-      - uses: certram/vkube-cli-action@v1.0.1
+      - uses: certram/vkube-cli-action@v1.0.2
         with:
           vkube_config_file: "./VKubefile.yaml" # Path to your VKubefile, default: ./VKubefile.yaml
-          docker_username_secret: "DOCKERHUB_USERNAME" # Your docker registry username secret name, optional if you use public image
-          docker_token_secret: "DOCKERHUB_TOKEN"
-          ghcr_token_secret: "GHCR_TOKEN"
