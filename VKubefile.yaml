@@ -4,7 +4,7 @@ imageRegistry: docker # docker ghcr
 # Deploy information required
 containers:
 - imageName:  mmyapp # Your container image you want to deploy
-  tag: "1.1.1" # Your container image tag, default: latest, optional
+  tag: 1.1.1 # Your container image tag, default: latest, optional
   deploy:
     containerName: nodewatcher  # Your container name
     resourceUnit: 1 # You specfied the resource unit(at least 1) for your container. Please refer https://docs.vcloud.systems/VKservice/assetsDetail.html#resourceunit
