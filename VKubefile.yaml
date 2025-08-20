@@ -1,25 +1,18 @@
 Kind: vkube # default: vkube
-vkubeToken: "38KZHfS1S5CUr4WJshNJgCvRtmQhoWpdLhpMDhB2mgvqrJTxKpwuXvrEVowK4nKXrUtavt8ModEA6Ri4y9NmnEKcLxLu5yHb38HYhDNiGcNR1T4Po6zhAdMH31Q9fo1p8hDR934w7eW6HepokCQTW2kmVmDwb6pnvTJz6sYFAfAwQNNuMkV6RLtm6ULPKg1YXPCx9ibE5oLEobYS6tNKrpdUdwu77GsvZKEYz2JCpdfJ9LJAYJLjchhzG5zLkPsUXuDx7dR6qQSMaAp7244UnUkqKbT5bNLyKY6ZfAPJQWN62AeG6KmampQXePQQtcBTLapqFnW98qWmEDcxV1fRpbij1qPUbokJ3PSbQ27eYprttjb69EcJeRgm2dszBZo9trVuKsMcumGe9E" # Your userService's token (Required)
+vkubeToken: "" # Your userService's token (Required)
 imageRegistry: docker # docker ghcr
 # Deploy information required
 containers:
-- imageName:  mmyapp # Your container image you want to deploy
-  tag: 1.1.3 # Your container image tag, default: latest, optional
+- imageName: flask-test  # Your container image you want to deploy
+  tag: 2.0.0 # Your container image tag, default: latest, optional
   deploy:
-    containerName: nodewatcher  # Your container name
+    containerName: flaskcontainer # Your container name
     resourceUnit: 1 # You specfied the resource unit(at least 1) for your container. Please refer https://docs.vcloud.systems/VKservice/assetsDetail.html#resourceunit
     ports: # If it is configured, your container will be exposed to the outside world.
-    - containerPort: 980 # Your container port
+    - containerPort: 8081 # Your container port
       hostPort: 2009 # Your host port to access the container
       path: "/test" 
       rewrite: true
     configurations:  # If it is configured, your container will have configurations.
       /Users/bertramliu/codes/python/test-cli/vkube-cli/vkube_cli/nginx.conf: "/etc/nginx/conf.d/default.conf"
-  build:
-    installSSH: false
-    sshPubKeyPath: "" # Your SSH public key path, optional
-    dockerfilePath: "./internal/Dockerfile" # Your Dockerfile path
-    contextPath: "./internal/" # optional, docker build context
-    buildArgs:
-      - name: flask_version
-        value: 2.0.1
+  
