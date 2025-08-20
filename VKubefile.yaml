@@ -13,4 +13,9 @@ containers:
       hostPort: 2009 # Your host port to access the container
       path: "/test" 
       rewrite: true
+  build:
+    dockerfilePath: ./internal/Dockerfile # Your Dockerfile path
+    contextPath: "./internal/" # Your Dockerfile context, default: .
+    
+
   
