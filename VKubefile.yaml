@@ -1,0 +1,21 @@
+Kind: vkube # default: vkube
+vkubeToken:  # Your userService's token (Required)
+imageRegistry: docker # docker ghcr
+# Deploy information required
+containers:
+- imageName: flask-test  # Your container image you want to deploy
+  tag: 1.0.1 # Your container image tag, default: latest, optional
+  deploy:
+    containerName: flaskcontainer # Your container name
+    resourceUnit: 1 # You specfied the resource unit(at least 1) for your container. Please refer https://docs.vcloud.systems/VKservice/assetsDetail.html#resourceunit
+    ports: # If it is configured, your container will be exposed to the outside world.
+    - containerPort: 8088 # Your container port
+      hostPort: 2009 # Your host port to access the container
+      path: "/test" 
+      rewrite: true
+  build:
+    dockerfilePath: ./internal/Dockerfile # Your Dockerfile path
+    contextPath: "./internal/" # Your Dockerfile context, default: .
+    
+
+  
