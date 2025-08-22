@@ -1,5 +1,5 @@
 Kind: vkube # default: vkube
-vkubeToken: "38KZHfS1S5CUr4WJshNJgCvRtmQhoWpdLhpMDhB2mgvqrJTxKpwuXvrEVstQyut4Ds3XUoai9rTRZPwv7KqHXkvr4wPVX2ojiRiaRvAC4FRWhcmh3uED1XGLgDyb9xtHffY9H54KryfXEDc8RoAbegRFBfRDphCJGj7fTDjfdHZWUbFNxh21oN1bT1akMTS9xE1kaM7s2zk9PBtYW15MHbMA9PBgzqNHepj3SrpCVLWiYnkhr17HR582muSafJFak3fGw82vdgmNNRJNsFgfJzrgZgAh9fgFpxj61ss5GZM28Bas34oujRxMR6q19WSonnQ2V38k8NhBgfaq8AoGPuFeEDt2kLaqw1BQMLs6dfBeszHdL4RpAAwmAzW21gX9pkbj1dturdA8eD" # Your userService's token (Required)
+vkubeToken:  # Your userService's token (Required)
 imageRegistry: docker # docker ghcr
 # Deploy information required
 containers:
